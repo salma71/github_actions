@@ -10,9 +10,6 @@ on:
   pull_request:
     branches: [ master ]
 
-  # Allows you to run this workflow manually from the Actions tab
-  workflow_dispatch:
-
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
 
@@ -23,20 +20,14 @@ jobs:
     - name: setup pyenv
       uses: "gabrielfalcao/pyenv-action@v5"
       with:
-        default: 3.7.2
-        versions: 3.6.8, 3.5.7, 3.8.6
+        versions: 3.7.2, 3.8.6
+        command: |
+          pip install pandas
 
     # create virtualenv for each python version
-
-    - name: Create virtualenv for python 3.5.7
-      run: pyenv local 3.5.7 && python3 -mvenv .venv357
-
-    - name: Create virtualenv for python 3.6.8
-      run: pyenv local 3.6.8 && python3 -mvenv .venv365
 
     - name: Create virtualenv for python 3.7.2
       run: pyenv local 3.7.2 && python3 -mvenv .venv372
       
     - name: Create virtualenv for python 3.8.6
       run: pyenv local 3.7.2 && python3 -mvenv .venv386
-
