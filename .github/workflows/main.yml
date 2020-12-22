@@ -16,22 +16,21 @@ jobs:
   my_python_job:
     name: "Python"
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        python:
-          - 3.6.8
-          - 3.7.5
 
     steps:
+    - name: Setup python  
     - uses: actions/checkout@v2
-    - name: Install python version
-      uses: gabrielfalcao/pyenv-action@v5
-      with:
-        default: "${{ matrix.python }}"
-        command: pip install -U pip  # upgrade pip after installing python
+      with: 
+        python-version: "3.8"
 
-    - name: Install dependencies
-      run: pip install -r requirements.txt
+
+    - name: install pyenv
+      id: pyenv_installation
+      uses: gabrielfalcao/pyenv-action@v5
+      with: 
+        versions: "3.8"
+        commands: |
+          pip install -r requirements.txt
 
   test_pyenv:
     runs-on: ubuntu-latest
@@ -40,11 +39,13 @@ jobs:
     - name: setup pyenv
       id: pyenv_installation
       uses: "gabrielfalcao/pyenv-action@v5"
-      with:
-        versions: 3.7.2, 3.8.6
-        command: |
-          pip install pandas
+
 
     - name: debug pyenv
       run: echo ${{ steps.pyenv_installation.outputs.pyenv_root }}
+       
+
+
+
+
   
