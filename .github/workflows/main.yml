@@ -23,7 +23,6 @@ jobs:
         versions: 3.7.2, 3.8.6
         command: |
           pip install pandas
-
     # create virtualenv for each python version
 
     - name: Create virtualenv for python 3.7.2
@@ -31,3 +30,6 @@ jobs:
       
     - name: Create virtualenv for python 3.8.6
       run: pyenv local 3.7.2 && python3 -mvenv .venv386
+    - name: debug pyenv
+      run: echo ${{ steps.pyenv_installation.outputs.pyenv_root }}
+  
