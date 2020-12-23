@@ -19,7 +19,6 @@ jobs:
       
   my_debug_job:
     runs-on: ubuntu-latest
-    name: install pyenv
     steps:
     - name: setup pyenv
       id: pyenv_installation
