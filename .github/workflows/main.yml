@@ -1,0 +1,30 @@
+name: Using python 3.7.5 with pyenv
+on: [push, pull_request]
+
+jobs:
+
+  test_pyenv:
+    runs-on: ubuntu-latest
+    name: install pyenv
+    steps:
+    - name: setup pyenv
+      uses: "gabrielfalcao/pyenv-action@v5"
+      with:
+        default: 3.7.2
+
+    # create virtualenv for each python version
+
+    - name: Create virtualenv for python 3.7.2
+      run: pyenv local 3.7.2 && python3 -mvenv .venv372
+      
+  my_debug_job:
+    runs-on: ubuntu-latest
+    steps:
+    - name: setup pyenv
+      id: pyenv_installation
+      uses: "gabrielfalcao/pyenv-action@v5"
+
+    - name: debug pyenv
+      run: echo ${{ steps.pyenv_installation.outputs.pyenv_root }}
+
+  
