@@ -12,7 +12,7 @@ jobs:
       with:
         default: 3.7.2
         command: |
-	   pip install -U pip setuptools
+	pip install -U pip setuptools
 
 
     # create virtualenv for each python version
