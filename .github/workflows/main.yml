@@ -19,8 +19,18 @@ jobs:
         command: pip install -U pip  # upgrade pip after installing python
     
     - name: create environment
-      run: pyenv local 3.8.6 && python -mvenv .venv357
+      run: pyenv local 3.8.6 && python -mvenv .venv386
 
     - name: Install dependencies
       run: pip install -r requirements.txt --upgrade pip
 
+  my_debug_job:
+    runs-on: ubuntu-latest
+    name: install pyenv
+    steps:
+    - name: setup pyenv
+      id: pyenv_installation
+      uses: "gabrielfalcao/pyenv-action@v7"
+
+    - name: debug pyenv
+      run: echo ${{ steps.pyenv_installation.outputs.pyenv_root }}
