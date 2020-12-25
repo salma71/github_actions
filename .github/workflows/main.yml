@@ -1,26 +1,28 @@
-name: Using
+name: Using python 3.7.5 with pyenv
 on: [push, pull_request]
 
 jobs:
-  my_python_job:
-    name: "Python"
+
+  test_pyenv:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        python:
-          - 3.6.8
-          - 3.7.5
-
+    name: install pyenv
     steps:
-    - uses: actions/checkout@v2
-    - name: Install python version
-      uses: gabrielfalcao/pyenv-action@v7
+    - name: setup pyenv
+      uses: "gabrielfalcao/pyenv-action@v5"
       with:
-        default: "${{ matrix.python }}"
-        command: pip install -U pip  # upgrade pip after installing python
+        default: 3.7.2
+        versions: 3.6.8, 3.5.7
+        command: |
+          pip install -U pip setuptools
+          pip install -r development.txt --upgrade pip
 
-    - name: Install dependencies
-      run: pip install -r requirements.txt
+    # create virtualenv for each python version
 
-    - name: Run tests
-      run: pytest .
+    - name: Create virtualenv for python 3.5.7
+      run: pyenv local 3.5.7 && python3 -mvenv .venv357
+
+    - name: Create virtualenv for python 3.6.8
+      run: pyenv local 3.6.8 && python3 -mvenv .venv365
+
+    - name: Create virtualenv for python 3.7.2
+      run: pyenv local 3.7.2 && python3 -mvenv .venv372
