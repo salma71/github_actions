@@ -2,7 +2,7 @@ name: Using
 on: [push, pull_request]
 
 jobs:
-  test:
+  setting-services:
     runs-on: ubuntu-latest
     timeout-minutes: 10
 
@@ -24,25 +24,4 @@ jobs:
           - 5432:5432
 
 
-
-    steps:
-      - uses: actions/checkout@v2
-      - name: Install python version
-        uses: gabrielfalcao/pyenv-action@v7
-        with:
-          default: 3.8.6
-          command: pip install -U pip  # upgrade pip after installing python
-      
-      - name: create environment
-        run: pyenv local 3.8.6 && python -mvenv .venv386
-
-      - name: Install dependencies
-        run: pip install -r requirements.txt --upgrade pip
-
-
-      - name: setup pyenv
-        id: pyenv_installation
-        uses: "gabrielfalcao/pyenv-action@v7"
-
-      - name: debug pyenv
-        run: echo ${{ steps.pyenv_installation.outputs.pyenv_root }}
+  

@@ -30,21 +30,27 @@ jobs:
 
  
 
-
-  integration_test_setup:
+  install-python:
     runs-on: ubuntu-latest
-    name: install pyenv
+
     steps:
-    - name: setup pyenv
-      id: pyenv
-      uses: "gabrielfalcao/pyenv-action@v7"
+      - uses: actions/checkout@v2
+      - name: Install python version
+        uses: gabrielfalcao/pyenv-action@v7
+        with:
+          default: 3.8.6
+          command: pip install -U pip  # upgrade pip after installing python
+      
+      - name: create environment
+        run: pyenv local 3.8.6 && python -mvenv .venv386
 
-    - name: List python versions
-      run: pyenv versions
+      - name: Install dependencies
+        run: pip install -r requirements.txt --upgrade pip
 
-    - name: Verify default installation
-      run: python --version
 
-    - name: list files in pyenv_root
-      run: ls -lhtr ${{ steps.pyenv.outputs.pyenv_root }}
+      - name: setup pyenv
+        id: pyenv_installation
+        uses: "gabrielfalcao/pyenv-action@v7"
 
+      - name: debug pyenv
+        run: echo ${{ steps.pyenv_installation.outputs.pyenv_root }}
