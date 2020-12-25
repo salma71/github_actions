@@ -1,4 +1,4 @@
-name: Using python 3.7.5 with pyenv
+name: Using python 3.8.6 with pyenv
 on: [push, pull_request]
 
 jobs:
@@ -16,18 +16,16 @@ jobs:
     - name: setup pyenv
       uses: "gabrielfalcao/pyenv-action@v7"
       with:
-        versions: 3.6.8, 3.8.6
+        versions: 3.8.6
         command: |
           pip install -U pip setuptools
-          pip install -r requirements.txt
+          pip install -r development.txt
 
     # create virtualenv for each python version
 
     - name: Create virtualenv for python 3.8.6
       run: pyenv local 3.8.6 && python -mvenv .venv386
 
-    - name: Create virtualenv for python 3.6.8
-      run: pyenv local 3.6.8 && python -mvenv .venv365
 
  
 
