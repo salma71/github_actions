@@ -1,50 +1,26 @@
-name: Using python 3.8.6 with pyenv
+name: Using
 on: [push, pull_request]
 
 jobs:
-  jest:
-    name: functional tests
+  my_python_job:
+    name: "Python"
     runs-on: ubuntu-latest
-    steps:
-    - name: Checkout
-      uses: actions/checkout@v2
+    strategy:
+      matrix:
+        python:
+          - 3.6.8
+          - 3.7.5
 
-  test_pyenv:
-    runs-on: ubuntu-latest
-    name: install pyenv
     steps:
-    - name: setup pyenv
-      uses: "gabrielfalcao/pyenv-action@v7"
+    - uses: actions/checkout@v2
+    - name: Install python version
+      uses: gabrielfalcao/pyenv-action@v7
       with:
-        versions: 3.8.6, 3.7.2
-        run: pyenv local 3.8.6 && python3 -mvenv .venv386
-        command: |
-          python -m pip install -U pip setuptools
-          python -m pip install -r development.txt
+        default: "${{ matrix.python }}"
+        command: pip install -U pip  # upgrade pip after installing python
 
-    # create virtualenv for each python version
+    - name: Install dependencies
+      run: pip install -r requirements.txt
 
-    - name: Create virtualenv for python 3.8.6
-      run: pyenv local 3.8.6 && python -mvenv .venv386
-
-
- 
-
-
-  integration_test_setup:
-    runs-on: ubuntu-latest
-    name: install pyenv
-    steps:
-    - name: setup pyenv
-      id: pyenv
-      uses: "gabrielfalcao/pyenv-action@v7"
-
-    - name: List python versions
-      run: pyenv versions
-
-    - name: Verify default installation
-      run: python --version
-
-    - name: list files in pyenv_root
-      run: ls -lhtr ${{ steps.pyenv.outputs.pyenv_root }}
-
+    - name: Run tests
+      run: pytest .
