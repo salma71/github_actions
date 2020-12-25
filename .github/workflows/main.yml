@@ -17,8 +17,7 @@ jobs:
       uses: "gabrielfalcao/pyenv-action@v7"
       with:
         versions: 3.8.6
-        command: |
-          pip install -U pip setuptools
+      
 
     # create virtualenv for each python version
 
