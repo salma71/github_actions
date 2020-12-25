@@ -7,7 +7,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout
-      uses: actions/checkout@master
+      uses: actions/checkout@v2
 
 
   integration_test_setup:
@@ -16,7 +16,7 @@ jobs:
     steps:
     - name: setup pyenv
       id: pyenv
-      uses: "gabrielfalcao/pyenv-action@v6"
+      uses: "gabrielfalcao/pyenv-action@v7"
 
     - name: List python versions
       run: pyenv versions
@@ -27,71 +27,3 @@ jobs:
     - name: list files in pyenv_root
       run: ls -lhtr ${{ steps.pyenv.outputs.pyenv_root }}
 
-  integration_test_preinstall_default:
-    runs-on: ubuntu-latest
-    name: pre-install default version
-    steps:
-    - name: pyenv + python 3.8.6
-      id: pyenv
-      uses: "gabrielfalcao/pyenv-action@v6"
-      with:
-        default: 3.8.6
-
-    - name: List python versions
-      run: pyenv versions
-
-    - name: Verify default installation
-      run: python --version | grep 3.8.6
-
-  integration_test_preinstall_versions:
-    runs-on: ubuntu-latest
-    name: pre-install multiple versions of python
-    steps:
-    - name: pyenv + python 3.6.5 and 3.8.6
-      id: pyenv
-      uses: "gabrielfalcao/pyenv-action@v6"
-      with:
-        default: 3.8.6
-        command: |
-          pip install -U pip
-          pip install -U setuptools
-        versions: 3.6.5,
-
-    - name: List python versions
-      run: pyenv versions
-
-    - name: Verify default installation
-      run: python --version
-
-    - name: Verify python 3.6.5 installation
-      run: pyenv local 3.6.5 && python --version | grep 3.6.5
-
-    - name: Verify python 3.7.3 installation
-      run: pyenv local 3.7.3 && python --version | grep 3.7.3
-
-
-  integration_test_run_command_after_each_installation:
-    runs-on: ubuntu-latest
-    name: run command after installing each python version
-    steps:
-    - name: Python 3.6.5 and 3.8.6 with latest pip
-      id: pyenv
-      uses: "gabrielfalcao/pyenv-action@v6"
-      with:
-        default: 3.8.6
-        command: |
-          pip install -U pip
-          pip install -U setuptools
-        versions: 3.6.5,
-
-    - name: List python versions
-      run: pyenv versions
-
-    - name: Verify default installation
-      run: python --version
-
-    - name: Verify pip version on python 3.6.5 installation
-      run: pyenv local 3.6.5 && pip --version
-
-    - name: Verify pip version on python 3.8.6 installation
-      run: pyenv local 3.8.6 && pip --version
