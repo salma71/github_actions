@@ -16,8 +16,10 @@ jobs:
     - name: setup pyenv
       uses: "gabrielfalcao/pyenv-action@v7"
       with:
-        versions: 3.8.6
-      
+        versions: 3.8.6, 3.7.2
+        command: |
+          pip install -U pip setuptools
+          pip install -r development.txt
 
     # create virtualenv for each python version
 
