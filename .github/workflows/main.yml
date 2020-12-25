@@ -1,4 +1,4 @@
-name: Continuous Integration
+name: Using python 3.7.5 with pyenv
 on: [push, pull_request]
 
 jobs:
@@ -8,6 +8,28 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v2
+
+  test_pyenv:
+    runs-on: ubuntu-latest
+    name: install pyenv
+    steps:
+    - name: setup pyenv
+      uses: "gabrielfalcao/pyenv-action@v7"
+      with:
+        versions: 3.6.8, 3.8.6
+        command: |
+          pip install -U pip setuptools
+          pip install -r requirements.txt
+
+    # create virtualenv for each python version
+
+    - name: Create virtualenv for python 3.8.6
+      run: pyenv local 3.8.6 && python -mvenv .venv386
+
+    - name: Create virtualenv for python 3.6.8
+      run: pyenv local 3.6.8 && python -mvenv .venv365
+
+ 
 
 
   integration_test_setup:
