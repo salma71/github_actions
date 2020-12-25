@@ -14,7 +14,7 @@ jobs:
         versions: 3.6.8, 3.5.7
         command: |
           pip install -U pip setuptools
-          pip install -r development.txt --upgrade pip
+          pip install -r requirements.txt --upgrade pip
 
     # create virtualenv for each python version
 
