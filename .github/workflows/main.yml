@@ -2,51 +2,47 @@ name: Using
 on: [push, pull_request]
 
 jobs:
-  my_database:
+  test:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
 
     services:
-      postgres:
-        image: postgres:10.8
+      db_service:
+        image: postgres
         env:
           POSTGRES_USER: postgres
+          POSTGRES_DB: postgres
           POSTGRES_PASSWORD: postgres
-          POSTGRES_DB: github_actions
+        # Set health checks to wait until postgres has started
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
         ports:
+          # Maps tcp port 5432 on service container to the host
           - 5432:5432
-        # needed because the postgres container does not provide a healthcheck
-        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
 
 
-  my_python_job:
-    name: "Python"
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        python:
-          - 3.8.6
 
     steps:
-    - uses: actions/checkout@v2
-    - name: Install python version
-      uses: gabrielfalcao/pyenv-action@v7
-      with:
-        default: "${{ matrix.python }}"
-        command: pip install -U pip  # upgrade pip after installing python
-    
-    - name: create environment
-      run: pyenv local 3.8.6 && python -mvenv .venv386
+      - uses: actions/checkout@v2
+      - name: Install python version
+        uses: gabrielfalcao/pyenv-action@v7
+        with:
+          default: 3.8.6
+          command: pip install -U pip  # upgrade pip after installing python
+      
+      - name: create environment
+        run: pyenv local 3.8.6 && python -mvenv .venv386
 
-    - name: Install dependencies
-      run: pip install -r requirements.txt --upgrade pip
+      - name: Install dependencies
+        run: pip install -r requirements.txt --upgrade pip
 
-  my_debug_job:
-    runs-on: ubuntu-latest
-    name: install pyenv
-    steps:
-    - name: setup pyenv
-      id: pyenv_installation
-      uses: "gabrielfalcao/pyenv-action@v7"
 
-    - name: debug pyenv
-      run: echo ${{ steps.pyenv_installation.outputs.pyenv_root }}
+      - name: setup pyenv
+        id: pyenv_installation
+        uses: "gabrielfalcao/pyenv-action@v7"
+
+      - name: debug pyenv
+        run: echo ${{ steps.pyenv_installation.outputs.pyenv_root }}
