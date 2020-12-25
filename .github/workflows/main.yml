@@ -8,8 +8,6 @@ jobs:
     strategy:
       matrix:
         python:
-          - 3.6.8
-          - 3.7.5
           - 3.8.6
 
     steps:
@@ -19,6 +17,9 @@ jobs:
       with:
         default: "${{ matrix.python }}"
         command: pip install -U pip  # upgrade pip after installing python
+    
+    - name: create environment
+      run: pyenv local 3.8.6 && python -mvenv .venv357
 
     - name: Install dependencies
       run: pip install -r requirements.txt --upgrade pip
